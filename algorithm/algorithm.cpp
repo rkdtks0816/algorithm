@@ -1,13 +1,40 @@
 ﻿// algorithm.cpp : 이 파일에는 'main' 함수가 포함됩니다. 거기서 프로그램 실행이 시작되고 종료됩니다.
 //
 
+#include <string>
+#include <vector>
 #include <iostream>
 
-int main()
-{
-    std::cout << "Hello World!\n";
+using namespace std;
+
+
+void dfs(string now, int level, vector<vector<string>> tickets){
+    
+    //cout<<now<<endl;
+    if (level>=tickets.size()) return; 
+    
+    for (int i=0; i<tickets.size(); i++){
+        if (now==tickets[i][0]){
+            string next=tickets[i][1];  
+            cout<<next<<endl;
+            dfs(next, level+1, tickets);
+        } 
+    }
+
+
 }
 
+vector<string> solution(vector<vector<string>> tickets) {
+    vector<string> answer;
+    
+    cout<<tickets[0][0];
+    
+    dfs(tickets[0][0],0, tickets);
+    
+    
+    
+    return answer;
+}
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
 // 프로그램 디버그: <F5> 키 또는 [디버그] > [디버깅 시작] 메뉴
 
