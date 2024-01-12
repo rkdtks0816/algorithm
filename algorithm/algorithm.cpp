@@ -5,20 +5,35 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
+
+int DAT[10001];
+vector<string> answer;
+bool isCheck;
 
 
 void dfs(string now, int level, vector<vector<string>> tickets){
     
     //cout<<now<<endl;
+    answer.push_back(now);
+    
     if (level>=tickets.size()) return; 
     
     for (int i=0; i<tickets.size(); i++){
+        if (DAT[i]==1) continue;
+        
         if (now==tickets[i][0]){
             string next=tickets[i][1];  
-            cout<<next<<endl;
+            //cout<<next<<endl;
+            DAT[i]=1;
             dfs(next, level+1, tickets);
+            
+            /*if (isCheck){
+                answer.pop_back();
+                DAT[i]=0;
+            }    */       
         } 
     }
 
@@ -26,11 +41,15 @@ void dfs(string now, int level, vector<vector<string>> tickets){
 }
 
 vector<string> solution(vector<vector<string>> tickets) {
-    vector<string> answer;
+    //vector<string> answer;
+    string start=tickets[0][0];
     
-    cout<<tickets[0][0];
+    sort(tickets.begin(), tickets.end());
     
-    dfs(tickets[0][0],0, tickets);
+    //cout<<tickets[0][0];
+    
+    dfs(start,0, tickets);
+    
     
     
     
