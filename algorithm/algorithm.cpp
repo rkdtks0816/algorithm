@@ -13,40 +13,39 @@ int DAT[10001];
 vector<string> answer;
 bool isCheck;
 
-
 void dfs(string now, int level, vector<vector<string>> tickets){
     
     //cout<<now<<endl;
     answer.push_back(now);
     
-    if (level>=tickets.size()) return; 
+    if (level>=tickets.size()) {
+        isCheck=true;
+    }
     
     for (int i=0; i<tickets.size(); i++){
-        if (DAT[i]==1) continue;
-        
-        if (now==tickets[i][0]){
-            string next=tickets[i][1];  
-            //cout<<next<<endl;
-            DAT[i]=1;
-            dfs(next, level+1, tickets);
+        if (tickets[i][0]==now && DAT[i]==0){
             
-            /*if (isCheck){
+            DAT[i]=1;
+            dfs(tickets[i][1],level+1,tickets);
+            
+            if (!isCheck){
                 answer.pop_back();
                 DAT[i]=0;
-            }    */       
-        } 
+            }
+        }
     }
 
 
 }
 
 vector<string> solution(vector<vector<string>> tickets) {
-    //vector<string> answer;
-    string start=tickets[0][0];
+    string start="ICN";
     
     sort(tickets.begin(), tickets.end());
+    /*for (int i=0; i<tickets.size(); i++){
+        cout<<tickets[i][0]<<" "<<tickets[i][1]<<endl;
+    }*/
     
-    //cout<<tickets[0][0];
     
     dfs(start,0, tickets);
     
