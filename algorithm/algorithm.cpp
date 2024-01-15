@@ -1,72 +1,57 @@
 ﻿/*
-모든 정점을 찍고
-다시 1번으로 돌아오기
-최소비용 출력
+돌다리를 통과할 수 있는 모든 가능한 방법의 수 계산
 */
 /*
-N : 1 ~ 12
-정점 사이로 이동할 수 없는 곳은 0으로 표기
-한번씩만 들를 수 있음
+조건
+	왼쪽에서 오른쪽
+	마법의 두루마리에 적힌 문자열의 
+		순서대로 
+		모두
+	악마와 천사를
+		번갈아가면서
+		출발은 상관없다
+	한칸 이상 전진
+	건너뛰는 칸의 수는 상관없다
+	방법이 없다면 0 출력
 */
 #include<iostream>
+#include<string>
 
 using namespace std;
 
-// input
-int N; // 정점 개수
-int costs[13][13]; // 정점사이 비용
-// variable
-int visited[13]; // 방문여부 저장
-// output
-int ans = 2e9; // 최소 비용
+// 입력값
+string ms; // magic str
+string ss[2]; // stone str
+// 변수
 
-// 초기화
-void Init() {
-	cin >> N;
-	for (int nr = 0; nr < N; nr++) {
-		for (int nc = 0; nc < N; nc++) {
-			cin >> costs[nr][nc];
-		}
-	}
-	// 1번 방문 표시
-	visited[0] = 1;
+// 출력값
+int ans; // 돌다리를 건널 수 있는 방법의 수
+
+// 입력
+void Input() {
+	cin >> ms >> ss[0] >> ss[1];
 }
-
-void DFS(int level, int now, int now_cost) {
-	// 모든 정점 -> 기저조건 level이 N까지
-	if (level == N - 1) {
-		if (costs[now][0] == 0) return;
-		// 다시 1번으로 돌아가야함
-		now_cost += costs[now][0];
-		// 최소값인지 확인
-		if (now_cost < ans) {
-			ans = now_cost;
-		}
-		return;
-	}
+// 시뮬레이션
+// now : 뽑아야 하는 마법의 문자열 인덱스
+// now_str : 지금 뽑아야하는 문자열 0 : 악마, 1 : 천사, 2 : 둘 중 하나
+void Simulate(int now, int now_str) {
+	// 기저 조건 : 마법의 문자열 길이 만큼 뽑기
 	// 반복문
-	for (int ni = 0; ni < N; ni++) {
-		int next = ni;
-		// 갈 수 있는 정점 이동 costs[now][i] != 0;
-		if (costs[now][next] == 0) continue;
-		// 방문한 노드라면 continue;
-		if (visited[next] == 1) continue;
-		// 갈 수 있다면 방문 표시, 재귀
-		visited[next] = 1;
-		DFS(level + 1, next, now_cost + costs[now][next]);
-		// 재귀 나와서 다시 방문 X 표시
-		visited[next] = 0;
- 	}
-}
+	for (int si = 0; si < ss[0].size(); si++) {
+		// 마법의 문자열 뽑기
+		if (now_str == 2) {
 
-// Output
+		}
+	}
+}
+// 출력
 void Output() {
 	cout << ans;
 }
 
 int main() {
-	Init();
-	DFS(0, 0, 0);
+	Input();
+	Simulate(0, 2);
 	Output();
 	return 0;
 }
