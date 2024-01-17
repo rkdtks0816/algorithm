@@ -23,6 +23,7 @@ using namespace std;
 string ms; // magic str
 string ss[2]; // stone str
 // 변수
+int mlen; // 마법의 두루마리 길이
 int slen; // 돌다리 길이
 // 출력값
 int ans; // 돌다리를 건널 수 있는 방법의 수
@@ -31,27 +32,29 @@ int ans; // 돌다리를 건널 수 있는 방법의 수
 void Input() {
 	cin >> ms >> ss[0] >> ss[1];
 	slen = ss[0].size();
+	mlen = ms.size();
 }
 // 시뮬레이션
 // now : 뽑아야 하는 마법의 문자열 인덱스
 // now_str : 지금 뽑아야하는 문자열 0 : 악마, 1 : 천사
 void Simulate(int now, int now_str, int start_idx) {
+
+	int de = 1;
 	// 기저 조건 : 마법의 문자열 길이 만큼 뽑기
-	if (now == ms.size()) {
+	if (now == mlen) {
 		ans++;
 		return;
 	}
 	// 반복문
 	for (int si = start_idx; si < slen; si++) {
+		de = 1;
 		// 마법의 문자열 뽑기
 		if (ms[now] != ss[now_str][si]) continue;
 		// 뽑기
 		int next_str = now_str;
 		if (now_str == 0) next_str = 1;
 		else next_str = 0;
-		Simulate(now++, next_str, si++);
-		// 지나가기
-		Simulate(now, now_str, si++);
+		Simulate(now + 1, next_str, si + 1);
 	}
 }
 // 출력
