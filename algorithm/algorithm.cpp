@@ -1,57 +1,31 @@
 ﻿// algorithm.cpp : 이 파일에는 'main' 함수가 포함됩니다. 거기서 프로그램 실행이 시작되고 종료됩니다.
 //
 
-//프로그래머스 여행경로
-#include <string>
+//스택-같은수 제거하기
 #include <vector>
 #include <iostream>
 #include <algorithm>
 
 using namespace std;
 
-int DAT[10001];
-vector<string> answer;
-bool isCheck;
-
-void dfs(string now, int level, vector<vector<string>> tickets){
+vector<int> solution(vector<int> arr) 
+{
+    vector<int> answer;
     
-    //cout<<now<<endl;
-    answer.push_back(now);
-    
-    if (level>=tickets.size()) {
-        isCheck=true;
-    }
-    
-    for (int i=0; i<tickets.size(); i++){
-        if (tickets[i][0]==now && DAT[i]==0){
-            
-            DAT[i]=1;
-            dfs(tickets[i][1],level+1,tickets);
-            
-            if (!isCheck){
-                answer.pop_back();
-                DAT[i]=0;
-            }
-        }
+    for (int i=0; i<arr.size(); i++){
+        //cout<<arr[i]<<endl;
+        
+        int now=arr[i];
+        if (answer.size()>0&&now==answer.back())continue;
+        answer.push_back(now);
+        
+        //if (answer.size()>0&& answer.back()!=arr[i]) 
+        //    answer.push_back(arr[i]);
+        
+        
     }
 
 
-}
-
-vector<string> solution(vector<vector<string>> tickets) {
-    string start="ICN";
-    
-    sort(tickets.begin(), tickets.end());
-    /*for (int i=0; i<tickets.size(); i++){
-        cout<<tickets[i][0]<<" "<<tickets[i][1]<<endl;
-    }*/
-    
-    
-    dfs(start,0, tickets);
-    
-    
-    
-    
     return answer;
 }
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
