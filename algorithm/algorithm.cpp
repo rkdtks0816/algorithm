@@ -1,64 +1,58 @@
 ﻿/*
-	두 학생 중 누가 더 잘했는지 알려줌
-	M 번 질문
-	학생 X의
-		가장 높은 등수 U
-		가장 낮은 등수 V
+	동굴 탐사 로봇 두 대
+	획득한 정보 공유 통신
+	통신을 위해 이동해야 하는 거리의 합의 최솟값을 계산
 */
 /*
-	학생 1부터 시작
-	동점일 경우는 없다.
-	입력 앞의 학생이 더 잘헀다
+조건
+	1번부터 N번
+	통로는 N - 1번
+		두 방만 연결
+	통신을 위해서는 같은 통로 위에 위치
+		양 끝방은 같은 통로로 간주
+	N : 1 ~ 100000
+	통로의 길이는 1000을 넘지 않음
 */
-#include<iostream>
-#include<vector>
+#include<iostream>;
 
 using namespace std;
 
+// 구조체 연결방, 길이
+struct ConnectRoom {
+	int roomNum;
+	int roomLen;
+};
+
 // 입력값
-int N, M, X; //학생수, 질문수, 타겟학생
+int N; // 방의 개수
+ConnectRoom roomMap[100001]; //  연결된 방과 길이 배열 저장
 // 변수
-// 0: high, 1: low
-vector<int> position[2][100001];
-int visited[2][100001];
+
 // 출력값
-int U, V;
+int ans = 2e9;
 
 // 입력
 void init() {
-	cin >> N >> M >> X;
-	U = 1;
-	V = N;
-	for (int mi = 0; mi < M; mi++) {
-		int tmpHigh, tmpLow;
-		cin >> tmpHigh >> tmpLow;
-		position[0][tmpLow].push_back(tmpHigh);
-		position[1][tmpHigh].push_back(tmpLow);
+	cin >> N;
+	for (int ni = 0; ni < N; ni++) {
+		int tmpRoom1, tmpRoom2, tmpLen;
+		cin >> tmpRoom1 >> tmpRoom2 >> tmpLen;
+		roomMap[tmpRoom1] = { tmpRoom2, tmpLen };
+		roomMap[tmpRoom2] = { tmpRoom1, tmpLen };
 	}
 }
-// 시뮬
-// 타겟 학생을 시작
-void runSimulation(int now, int nowPosition) {
-	// 타고타고 들어가기
-	for (int i = 0; i < position[nowPosition][now].size(); i++) {
-		int next = position[nowPosition][now][i];
-		
-		if (visited[nowPosition][next] == 1) continue;
-		visited[nowPosition][next] = 1;
-		if (nowPosition == 0) U++;
-		else V--;
-		runSimulation(next, nowPosition);
+
+void runSimulate(int now1, int now2) {
+	// 같은 통로이면 리턴
+	if () {
+		// 최솟값 확인
+		if (ans > )
+		return
 	}
-}
-void output() {
-	cout << U << endl << V;
+	// 
 }
 
 int main() {
-	init();
-	runSimulation(X, 0);
-	runSimulation(X, 1);
-	output();
 
 	return 0;
 }
