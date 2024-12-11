@@ -1,59 +1,51 @@
+function detechDirection(start, end) {
+    return end > start ? 1 : -1;
+}
+
 function solution(points, routes) {
- 
-    // 현재 row,column 와 타겟으로 포인트의 row와 column 넣으면
-    // 한칸 이동했을 때 좌표를 반환한다.
-    const getNextPosition =(r,c,targetR,targetC)=>{
-        if(r!==targetR) return r > targetR ? [r-1,c] : [r+1,c]
-        if(c!==targetC) return c > targetC ? [r,c-1] : [r,c+1]
-        return [r,c]
-    }
- 
-    let arr = []
-    let maxIndex = 0
-    routes.forEach((route)=>{
-        let startPoint = route.shift()
-        let history =[points[startPoint-1]]
-        
-        while(route.length){
-            let [nowR,nowC] = history.at(-1)
-            let [targetR,targetC] = points[route[0]-1]
-            
-            let [nextR,nextC] = getNextPosition(nowR,nowC,targetR,targetC)
-            
-            history.push([nextR,nextC])
-            if(nextR === targetR && nextC === targetC){
-                route.shift()
+    var answer = 0;
+    // 방문해야하는 포인트 수
+    const maxPoint = routes[0].length - 1;
+    // 로봇 타겟 인덱스
+    const targets = new Array(routes.length).fill(1);
+    // 도착한 로봇 수
+    let robotCnt = 0;
+    // 현재 로봇 위치
+    let curPosition = routes.map(([start]) => [...points[start - 1]]);
+    // 모든 로봇이 도착 할 때까지
+    while (robotCnt < routes.length) {
+        // 위치 카운트
+        let positionMap = new Map();
+        for (let i = 0; i < routes.length; i++) {
+            const robot = curPosition[i];
+            const robotKey = JSON.stringify(robot);
+            const target = points[routes[i][targets[i]] - 1];
+            if (targets[i] === maxPoint + 1) {
+                positionMap.set(robotKey, (positionMap.get(robotKey) || 0) + 1);
+                if (positionMap.get(robotKey) === 2) answer++;
+                targets[i]++;
+                robotCnt++;
             }
-        }
-        // 로봇들이 각자 이동하는 시간이 모두 다를 수 있으므로 최대로 걸리는 시간을 알아야함 
-        maxIndex = Math.max(maxIndex,history.length-1)
-        arr.push(history)
-    })
- 
-    let answer = 0
-    let index = 0
-    while(index<=maxIndex){
-        let crushPoints = []
-        for(let i=0; i<arr.length-1; i++){
-            for(let j=i+1; j<arr.length; j++){
-                if(
-                    arr[i][index] && arr[j][index] &&
-                    arr[i][index][0]===arr[j][index][0] 
-                    && arr[i][index][1]===arr[j][index][1]
-                ){
-                    
-                    let alreadyInclude = crushPoints.some(
-                        (point)=>point[0]===arr[i][index][0] && point[1]===arr[i][index][1]
-                    )
-                    if(!alreadyInclude){
-                        crushPoints.push([arr[i][index][0],arr[i][index][1]])
-                        ++answer 
-                    }       
+            if (targets[i] <= maxPoint) {
+                positionMap.set(robotKey, (positionMap.get(robotKey) || 0) + 1);
+                if (positionMap.get(robotKey) === 2) answer++;
+                // r 이동
+                if (robot[0] !== target[0]) {
+                    robot[0] += detechDirection(robot[0], target[0]);
                 }
+                // c 이동
+                else if (robot[1] !== target[1]) {
+                    robot[1] += detechDirection(robot[1], target[1]);
+                }
+                // 모두 같다면 다음 타겟
+                if (robot[0] === target[0] && robot[1] === target[1]){
+                    targets[i]++;
+                    lastPoint = targets[i] > maxPoint ? true : false;
+                }
+                curPosition[i] = robot;
+                continue;
             }
         }
-        ++index
     }
- 
-    return answer
+    return answer;
 }
