@@ -1,36 +1,35 @@
 function solution(edges) {
-    var answer = [];
-    var totalNodeCount = edges.reduce((acc, edge) => {
-        return Math.max(acc, ...edge)
-    }, -Infinity) + 1
-    var inEdges = Array.from({ length: totalNodeCount }, () => [])
-    var outEdges = Array.from({ length: totalNodeCount }, () => [])
-    
-    edges.forEach(item => {
-        outEdges[item[0]].push(item[1])
-        inEdges[item[1]].push(item[0])
-    })
-    
-    var center = 0
-    var pole = 0
-    var eight = 0
-    
-    for (var i = 1; i < totalNodeCount; i++) {
-        var inCount = inEdges[i].length
-        var outCount = outEdges[i].length
-                
-        if (inCount == 0 && outCount >= 2) {
-            center = i
-        } else if (inCount > 0 && outCount == 0) {
-            pole += 1
-        } else if (inCount >= 2 && outCount >= 2) {
-            eight += 1
+    var answer = [0, 0, 0, 0];
+    // 간선 정보 [들어오는 간선, 나가는 간선]
+    const degrees = edges.reduce((map, edge) => {
+        const [start, end] = edge;
+
+        if (!map.has(start)) {
+            map.set(start, [0, 1]);
+        } else {
+            const [inDegree, outDegree] = map.get(start);
+            map.set(start, [inDegree, outDegree + 1]);
         }
-    }
-    
-    var totalGraphCount = outEdges[center].length
-    var donut = totalGraphCount - pole - eight
-    var answer = [center, donut, pole, eight]
-    
+
+        if (!map.has(end)) {
+            map.set(end, [1, 0]);
+        } else {
+            const [inDegree, outDegree] = map.get(end);
+            map.set(end, [inDegree + 1, outDegree]);
+        }
+
+        return map;
+    }, new Map());
+    for(const [edge, degree] of degrees){ 
+        const [inDegree, outDegree] = degree;  
+        if( 2 <= outDegree && inDegree == 0) { 
+            answer[0] = edge;
+        } else if(outDegree == 0) {
+            answer[2]++;
+        } else if(outDegree >= 2 && inDegree >= 2){
+            answer[3]++;
+        }  
+    } 
+    answer[1] = degrees.get(answer[0])[1] - answer[2] - answer[3];
     return answer;
 }
